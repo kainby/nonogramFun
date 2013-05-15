@@ -18,7 +18,7 @@ package enums;
  */
 public enum Difficulty {
 	EASY(5, 15, "Easy"), MEDIUM(15, 25, "Medium"), HARD(25, 50, "Hard"), 
-	INSANE(50, 100, "Insane"),  UNDEFINED(5, 100, "Undefined");
+	INSANE(50, 100, "Insane"), UNDEFINED(5, 100, "Undefined"), INVALID(5, 100, "Invalid");
 	
 	private final int minDim;  // Minimum dimension of this difficulty
 	private final int maxDim;  // Maximum dimension of this difficulty
@@ -55,10 +55,13 @@ public enum Difficulty {
 		int min = Math.min(numRows, numCols);
 		int max = Math.max(numRows, numCols);
 		
-		if(this != Difficulty.UNDEFINED) {
+		if(this == Difficulty.INVALID) {
+			return min < getMinDimension() || getMaxDimension() <= max;
+		}else if(this != Difficulty.UNDEFINED) {
 			return getMinDimension() <= min && max < getMaxDimension();
 		}else{
-			return !Difficulty.EASY.isInRange(numRows, numCols) && !Difficulty.MEDIUM.isInRange(numRows, numCols) &&
+			return (getMinDimension() <= min && max < getMaxDimension()) &&
+				   !Difficulty.EASY.isInRange(numRows, numCols) && !Difficulty.MEDIUM.isInRange(numRows, numCols) &&
 				   !Difficulty.HARD.isInRange(numRows, numCols) && !Difficulty.INSANE.isInRange(numRows, numCols);
 		}
 	}

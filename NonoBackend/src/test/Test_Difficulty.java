@@ -6,6 +6,7 @@
  * @since   Spring 2013 
  */
 
+
 package test;
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -84,9 +85,9 @@ public class Test_Difficulty {
 	@Test
 	public void test_isInRange_Undef_1() {
 		Difficulty d = Difficulty.UNDEFINED;
-		assertTrue(d.isInRange(START_UNDEF, 10000));
+		assertTrue(d.isInRange(START_UNDEF-1, START_EASY));
 		assertTrue(d.isInRange(START_HARD+ADD_MORE, START_INSANE+ADD_SMALL));
-		assertTrue(d.isInRange(START_EASY-ADD_MORE, START_MED-ADD_SMALL));
+		assertTrue(d.isInRange(START_EASY, START_INSANE+ADD_SMALL));
 	}
 	
 	@Test
@@ -95,6 +96,22 @@ public class Test_Difficulty {
 		assertFalse(d.isInRange(START_EASY+ADD_SMALL, START_EASY+ADD_SMALL));
 		assertFalse(d.isInRange(START_HARD-1, START_MED+ADD_MORE));
 		assertFalse(d.isInRange(START_INSANE, START_INSANE));
+	}
+	
+	@Test
+	public void test_isInRange_Invalid_1() {
+		Difficulty d = Difficulty.INVALID;
+		assertTrue(d.isInRange(START_UNDEF, 10000));
+		assertTrue(d.isInRange(2, START_INSANE+ADD_SMALL));
+		assertTrue(d.isInRange(START_EASY-ADD_MORE, 1));
+	}
+	
+	@Test
+	public void test_isInRange_Invalid_2() {
+		Difficulty d = Difficulty.INVALID;
+		assertFalse(d.isInRange(START_EASY+ADD_SMALL, START_EASY+ADD_SMALL));
+		assertFalse(d.isInRange(START_HARD+ADD_MORE, START_INSANE+ADD_SMALL));
+		assertFalse(d.isInRange(START_UNDEF-1, START_EASY));
 	}
 	
 	
@@ -155,15 +172,29 @@ public class Test_Difficulty {
 	
 	@Test
 	public void test_getDifficulty_Undef_1() {
-		assertEquals(Difficulty.UNDEFINED, Difficulty.getDifficulty(START_UNDEF, 10000));
+		assertEquals(Difficulty.UNDEFINED, Difficulty.getDifficulty(START_UNDEF-1, START_EASY));
 		assertEquals(Difficulty.UNDEFINED, Difficulty.getDifficulty(START_HARD+ADD_MORE, START_INSANE+ADD_SMALL));
-		assertEquals(Difficulty.UNDEFINED, Difficulty.getDifficulty(START_EASY-ADD_MORE, START_MED-ADD_SMALL));
+		assertEquals(Difficulty.UNDEFINED, Difficulty.getDifficulty(START_EASY, START_INSANE+ADD_SMALL));
 	}
 	
 	@Test
 	public void test_getDifficulty_Undef_2() {
 		assertNotSame(Difficulty.UNDEFINED, Difficulty.getDifficulty(START_EASY+ADD_SMALL, START_EASY+ADD_SMALL));
 		assertNotSame(Difficulty.UNDEFINED, Difficulty.getDifficulty(START_HARD-1, START_MED+ADD_MORE));
-		assertNotSame(Difficulty.UNDEFINED, Difficulty.getDifficulty(START_INSANE, START_INSANE));
+		assertNotSame(Difficulty.UNDEFINED, Difficulty.getDifficulty(3, START_INSANE));
+	}
+	
+	@Test
+	public void test_getDifficulty_Invalid_1() {
+		assertEquals(Difficulty.INVALID, Difficulty.getDifficulty(START_UNDEF, 10000));
+		assertEquals(Difficulty.INVALID, Difficulty.getDifficulty(2, START_INSANE+ADD_SMALL));
+		assertEquals(Difficulty.INVALID, Difficulty.getDifficulty(START_EASY-ADD_MORE, START_EASY));
+	}
+	
+	@Test
+	public void test_getDifficulty_Invalid_2() {
+		assertNotSame(Difficulty.INVALID, Difficulty.getDifficulty(START_EASY+ADD_SMALL, START_EASY+ADD_SMALL));
+		assertNotSame(Difficulty.INVALID, Difficulty.getDifficulty(START_HARD+ADD_MORE, START_INSANE+ADD_SMALL));
+		assertNotSame(Difficulty.INVALID, Difficulty.getDifficulty(START_UNDEF-1, START_EASY));
 	}
 }
